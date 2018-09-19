@@ -11,3 +11,66 @@ IFS=$'\n' arr=($(cat MOCneg.txt)) ; for i in "${arr[@]}" ; do mv $i neg/$i ; don
 for i in': for i in *hs_metrics.txt ; do SAMPLEID=$(basename "$i" | cut -d_ -f1 | cut -d. -f1) ; echo "SAMPLE" > ${SAMPLEID}_kd_sample.txt ; echo ${SAMPLEID} >> ${SAMPLEID}_kd_sample.txt ; grep -v "#" $i | head -3 | tail -2 > ${SAMPLEID}_tmp_hsmetrics.txt ; grep -v "#" ${SAMPLEID}_insertsize_metrics.txt | head -3 | tail -2  | paste ${SAMPLEID}_tmp_hsmetrics.txt -  > ${SAMPLEID}_tmp_kd_metrics.txt ; python3 /home/kevin/MoLLuDiC/matchkdmetrics.py ${SAMPLEID}_tmp_kd_metrics.txt | head -n2 > ${SAMPLEID}_tmp_kd_allmetrics.txt ; paste ${SAMPLEID}_kd_sample.txt ${SAMPLEID}_tmp_kd_allmetrics.txt > ${SAMPLEID}_kdTree_metrics.txt ; done
 ```
 
+### Captain Achab Launcher
+```
+for i in /home/kevin/inputNGS/EXOME_V5/vcftest/{AJI,PR,M4,M9,M10,MAI}*.vcf
+do
+FAMILY=$(basename "$i" | cut -d. -f1)
+grep -A 1 $FAMILY /home/thomas/EXOME_V5/familly.txt > tmp.txt
+CASE=`awk -F "#" 'NR=2{print $1}' tmp.txt`
+DAD=`awk -F "#" 'NR=2{print $2}' tmp.txt`
+MUM=`awk -F "#" 'NR=2{print $3}' tmp.txt`
+cp /home/kevin/Achabilarity/json/captainAchab_git_trio_inputs.json /home/kevin/Achabilarity/json/AJI/captainAchab_${CASE}_inputs.json
+sed -i "s/XXX/${FAMILY}/g" /home/kevin/Achabilarity/json/AJI/captainAchab_${CASE}_inputs.json
+sed -i "s/YYY/${}/g" /home/kevin/Achabilarity/json/AJI/captainAchab_${CASE}_inputs.json
+usr/local/bin/singularity run -B /softs/ /home/kevin/Achabilarity/20180817_achabilarity.simg -i /home/kevin/Achabilarity/json/AJI/captainAchab_${CASE}_inputs.json   
+done
+```
+### Captain Achab JSON
+```
+{
+"captainAchab.workflowType":"CaptainAchab",
+"captainAchab.srunLow":"",
+"captainAchab.outDir": "/home/kevin/Achabilarity/output/",
+"captainAchab.sampleID": "XXX",
+"captainAchab.inputVcf": "/home/kevin/inputNGS/EXOME_V5/vcf/YYY.vcf",
+"captainAchab.newHope": true,
+"captainAchab.keepFiles":false,
+"captainAchab.withPhenolyzer":true,
+"captainAchab.checkTrio": "--trio",
+"captainAchab.caseSample": "XXX",
+"captainAchab.fatherSample": "YYY",
+"captainAchab.motherSample": "ZZZ",
+"captainAchab.diseaseFile": "",
+"captainAchab.genesOfInterest": "",
+"captainAchab.filterList":"",
+"captainAchab.cnvGeneList":"/home/kevin/inputNGS/EXOME_V5/cnv/XXX.annotated.forachab.bed",       
+"captainAchab.allelicFrequency": 0.012,
+"captainAchab.mozaicRate":0.2,                                                          
+"captainAchab.mozaicDP":5,                                                              
+"captainAchab.customInfo":"",
+"captainAchab.customVCF":"",                                                            
+"captainAchab.humanDb": "/softs/annovar/humandb",                                       
+"captainAchab.customXref": "/softs/annovar/humandb/gene_customfullxref.txt",            
+"captainAchab.fastaGenome":"/softs/annovar/humandb/hg19.fa",                            
+"captainAchab.phenolyzerExe": "/softwares/phenolyzer",                                  
+"captainAchab.mpaExe": "/softwares/MPA/MPA.py",                                         
+"captainAchab.tableAnnovarExe": "/softs/annovar/table_annovar.pl",                      
+"captainAchab.achabExe": "/softwares/Captain-ACHAB/achab.pl",                           
+"captainAchab.refAnnotateVariation":"/softs/annovar/annotate_variation.pl",             
+"captainAchab.refCodingChange":"/softs/annovar/coding_change.pl",                       
+"captainAchab.refConvert2Annovar":"/softs/annovar/convert2annovar.pl",                  
+"captainAchab.refRetrieveSeqFromFasta":"/softs/annovar/retrieve_seq_from_fasta.pl",     
+"captainAchab.refVariantsReduction":"/softs/annovar/variants_reduction.pl",             
+"captainAchab.gatkExe":"/softwares/gatk-4.0.4.0/gatk",                                  
+"captainAchab.bcftoolsExe":"/usr/local/bin/bcftools",                                   
+"captainAchab.perlPath":"/usr/bin/perl",                                                
+"captainAchab.pythonPath":"/usr/bin/python3",                                           
+"captainAchab.memory":"9000",                                                           
+"captainAchab.cpu":"1",                                                                 
+"write_to_cache": true,                                                                 
+"read_from_cache": true                                                                 
+}                                                                                         
+          
+```
+
