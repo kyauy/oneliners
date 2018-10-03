@@ -77,9 +77,10 @@ done
 ### VCF cleaner for SeqNext 
 
 ```bash
+
 #!/usr/bin/env/ bash
 
-### 
+###
 # VCF Cleaner, mostly for SeqNext VCF
 # mobidic
 # 03/10/2018
@@ -111,20 +112,18 @@ done
 ##contig=<ID=chrY,length=59373566>
 ##contig=<ID=chrM,length=16571>
 
-
-for i in *.vcf ; do 
+for i in raw_vcf/*.vcf ; do
 echo $i
-  if grep -q contig $i 
-    then 
-      echo contig is found in VCF Header 
-    else 
-      sed -i '/=VCF/r contig_hg19.txt' $i 
-  fi
+ if grep -q contig $i
+   then
+     echo contig is found in VCF Header
+   else
+     sed -i '/=VCF/r doc/contig_hg19.txt' $i
+ fi
 
-sed -i "s/ //g" $i 
-  
-awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' $i > tmp.vcf
+sed -i "s/ //g" $i
 
-mv tmp.vcf "$i" 
+awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' $i > vcf_clean/$(basename "$i" | cut -d. -f1).vcf
+
 done
 ```
