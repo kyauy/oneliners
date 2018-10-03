@@ -74,3 +74,30 @@ done
           
 ```
 
+### VCF cleaner for SeqNext 
+
+```bash
+#!/usr/bin/env/ bash
+
+### 
+# VCF Cleaner, mostly for SeqNext VCF
+# mobidic
+# 03/10/2018
+##
+
+for i in *.vcf ; do 
+echo $i
+  if grep -q contig $i 
+    then 
+      echo contig is found in VCF Header 
+    else 
+      sed -i '/=VCF/r contig_hg19.txt' $i 
+  fi
+
+sed -i "s/ //g" $i 
+  
+awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' $i > tmp.vcf
+
+mv tmp.vcf "$i" 
+done
+```
