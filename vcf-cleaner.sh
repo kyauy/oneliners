@@ -16,11 +16,11 @@ echo $i
   fi
 
 sed -i "s/ //g" $i 
-sed "s/\tS1/\t$(basename "$i" | cut -d. -f1)/g"  $i
+sed -i "s/\tS1/\t$(basename "$i" | cut -d. -f1)/g"  $i
 
 mkdir vcf_clean/$(basename "$i" | cut -d. -f1)
 cp doc/captainAchab_inputs.json vcf_clean/$(basename "$i" | cut -d. -f1)
-sed "s/S1/$(basename "$i" | cut -d. -f1)/g" vcf_clean/$(basename "$i" | cut -d. -f1)/captainAchab_inputs.json
+sed -i "s/S1/$(basename "$i" | cut -d. -f1)/g" vcf_clean/$(basename "$i" | cut -d. -f1)/captainAchab_inputs.json
 
 awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' $i > vcf_clean/$(basename "$i" | cut -d. -f1)/$(basename "$i" | cut -d. -f1).vcf
 
