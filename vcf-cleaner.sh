@@ -24,4 +24,6 @@ sed -i "s/S1/$(basename "$i" | cut -d. -f1)/g" vcf_clean/$(basename "$i" | cut -
 
 awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' $i > vcf_clean/$(basename "$i" | cut -d. -f1)/$(basename "$i" | cut -d. -f1).vcf
 
+rm $i
+
 done
