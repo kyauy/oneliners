@@ -127,3 +127,10 @@ awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' $i > vcf_clean/$(basename "$
 
 done
 ```
+# Create a csr key for ssl certificate
+
+```
+$ export MON_SITE=le_site_que_tu_va_utiliser.com
+$ openssl genrsa -out $MON_SITE.key 4096
+$openssl req -new -sha256 -key$MON_SITE.key -out $MON_SITE.csr
+```
